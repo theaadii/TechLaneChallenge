@@ -12,7 +12,7 @@ export function Shell({ children, wide = false, fixedBar = false }: { children: 
       <main id="main" className="flex-1 pb-10">
         {children}
       </main>
-      <footer className={`flex flex-col gap-3 border-t-2 border-dashed border-ink/30 py-5 sm:flex-row sm:items-center sm:justify-between${fixedBar ? " pb-28" : ""}`}>
+      <footer className={`flex items-center justify-between gap-3 border-t-2 border-dashed border-ink/30 py-5${fixedBar ? " pb-28" : ""}`}>
         <p className="font-mono text-xs font-bold text-ink">© 2026 Deboistech. All rights reserved.</p>
         <SocialLinks />
       </footer>

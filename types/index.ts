@@ -1,10 +1,12 @@
 export const TRACK_IDS = [
   "ai-ml",
-  "cloud-devops",
+  "web-dev",
+  "cloud-engineering",
+  "devops",
+  "cyber-security",
   "fde",
   "mobile",
-  "genai",
-  "agentic-ai",
+  "ai-dev",
 ] as const;
 
 export type TrackId = (typeof TRACK_IDS)[number];

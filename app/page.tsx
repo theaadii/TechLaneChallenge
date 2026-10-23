@@ -1,5 +1,6 @@
+import { HowItWorks } from "@/components/landing/how-it-works";
 import { LandingTracker } from "@/components/landing/landing-tracker";
-import { LaneCard } from "@/components/landing/lane-card";
+import { LaneCard, LaneCardContent } from "@/components/landing/lane-card";
 import { PixelDoodle } from "@/components/landing/pixel-doodle";
 import { ButtonLink } from "@/components/ui/button";
 import { Shell } from "@/components/ui/shell";
@@ -8,18 +9,18 @@ import { TRACK_LIST } from "@/lib/tracks";
 
 const steps = [
   { n: "1", title: "Play", text: `Answer ${QUESTIONS_PER_RUN} quick questions: scenarios, mini-debugging and what you enjoy building. No experience needed.` },
-  { n: "2", title: "Discover", text: "Earn XP, unlock your Tech Explorer badge and see which of six tech lanes fits you." },
+  { n: "2", title: "Discover", text: `Earn XP, unlock your Tech Explorer badge and see which of ${TRACK_LIST.length} tech lanes fits you.` },
   { n: "3", title: "Choose", text: "Pick the lane you actually want. The suggestion is a guide, you are in control." },
 ];
 
 const stats = [
   { value: String(QUESTIONS_PER_RUN), label: "Questions" },
-  { value: "3", label: "Minutes" },
-  { value: "6", label: "Tech lanes" },
+  { value: "~3", label: "Minutes" },
+  { value: String(TRACK_LIST.length), label: "Tech lanes" },
 ];
 
-const laneColours = ["bg-lane-blue", "bg-lane-green", "bg-lane-pink", "bg-lane-sand", "bg-lane-lilac", "bg-lane-sun"];
-const laneTilt = ["-rotate-1", "rotate-1", "rotate-1", "-rotate-1", "-rotate-1", "rotate-1"];
+const laneColours = ["bg-lane-blue", "bg-lane-green", "bg-lane-pink", "bg-lane-sand", "bg-lane-lilac", "bg-lane-sun", "bg-lane-blue", "bg-lane-pink", "bg-lane-sun"];
+const laneTilt = ["-rotate-1", "rotate-1", "rotate-1", "-rotate-1", "-rotate-1", "rotate-1", "-rotate-1", "rotate-1", "-rotate-1"];
 
 export default function Home() {
   return (
@@ -35,11 +36,7 @@ export default function Home() {
           </span>
         </h1>
         <p className="mt-6 text-xl font-medium text-[#3e3730]">Take the challenge. Discover your tech lane.</p>
-        <p className="mt-3 max-w-xl text-muted">
-          A short, game-style challenge that helps you explore technology careers. Answer scenario and
-          preference questions, collect XP, and get a track suggestion. Seeing your result never requires
-          your contact details.
-        </p>
+
 
         <dl className="mt-8 grid grid-cols-3 gap-3">
           {stats.map((s) => (
@@ -61,41 +58,45 @@ export default function Home() {
         </div>
       </section>
 
-      <section aria-labelledby="how-title" id="how" className="mt-16 scroll-mt-6">
-        <h2 id="how-title" className="font-mono text-xs font-bold uppercase tracking-[0.25em] text-muted">How it works</h2>
-        <ol className="mt-5">
-          {steps.map((s, i) => (
-            <li
-              key={s.n}
-              className={`relative pb-6 pl-16 ${i < steps.length - 1 ? "before:absolute before:left-6 before:top-12 before:bottom-0 before:border-l-2 before:border-dashed before:border-ink/40" : ""}`}
-            >
-              <span aria-hidden className="nb-shadow-sm absolute left-0 top-0 grid size-12 place-items-center rounded-full border-2 border-ink bg-brand text-white font-display text-xl font-extrabold">
-                {s.n}
-              </span>
-              <div className="nb-card p-4">
-                <h3 className="font-display text-xl font-extrabold">{s.title}</h3>
-                <p className="mt-1 text-sm text-muted">{s.text}</p>
-              </div>
-            </li>
-          ))}
-        </ol>
-      </section>
+      <HowItWorks steps={steps} />
 
       <section aria-labelledby="lanes" className="mt-10">
-        <h2 id="lanes" className="font-mono text-xs font-bold uppercase tracking-[0.25em] text-muted">Six tech lanes to discover</h2>
+        <h2 id="lanes" className="font-mono text-xs font-bold uppercase tracking-[0.25em] text-muted">{TRACK_LIST.length} tech lanes to discover</h2>
         <p className="mt-2 text-sm text-muted">
           This challenge doesn&apos;t rank you. It only points you to the domain that fits you best, so you know where to start.
         </p>
-        <ul className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-3">
-          {TRACK_LIST.map((t, i) => (
-            <LaneCard key={t.id} track={t} tone={laneColours[i % 6]} tilt={laneTilt[i % 6]} />
-          ))}
-        </ul>
+        {(() => {
+          const cols = 3;
+          const remainder = TRACK_LIST.length % cols;
+          const fullRows = TRACK_LIST.slice(0, TRACK_LIST.length - (remainder || 0));
+          const lastRow = remainder ? TRACK_LIST.slice(-remainder) : [];
+          return (
+            <>
+              <ul className="mt-5 grid grid-cols-3 gap-2 sm:gap-3">
+                {fullRows.map((t, i) => (
+                  <LaneCard key={t.id} track={t} tone={laneColours[i % laneColours.length]} tilt={laneTilt[i % laneTilt.length]} />
+                ))}
+              </ul>
+              {lastRow.length > 0 && (
+                <ul className="mt-2 flex justify-center gap-2 sm:gap-3">
+                  {lastRow.map((t, i) => {
+                    const gi = fullRows.length + i;
+                    return (
+                      <li key={t.id} className={`w-[calc(33.333%-4px)] ${laneTilt[gi % laneTilt.length]}`}>
+                        <LaneCardContent track={t} tone={laneColours[gi % laneColours.length]} />
+                      </li>
+                    );
+                  })}
+                </ul>
+              )}
+            </>
+          );
+        })()}
       </section>
 
       <section className="nb-card mt-12 flex flex-col items-start gap-4 bg-brand p-6 text-white">
         <h2 className="font-display text-3xl font-extrabold leading-tight">Ready to find your lane?</h2>
-        <p className="font-medium text-white">It takes about three minutes. Your result is yours.</p>
+        <p className="font-medium text-white">About 3 minutes. No login. Your result is yours.</p>
         <ButtonLink href="/challenge" variant="secondary" className="text-lg">
           Start Challenge →
         </ButtonLink>
