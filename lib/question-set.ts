@@ -2,9 +2,9 @@ import { QUESTIONS } from "@/lib/questions";
 import { TRACK_IDS, type AnswerOption, type Answers, type Question, type TrackId } from "@/types";
 
 /** Questions each student answers per run, drawn from the larger bank. */
-export const QUESTIONS_PER_RUN = 10;
+export const QUESTIONS_PER_RUN = 15;
 /** How many of those are "what excites you" preference questions; the rest are knowledge questions. */
-export const PREFERENCE_PER_RUN = 4;
+export const PREFERENCE_PER_RUN = 6;
 /** Options shown on each preference question (the bank has one per track, so some tracks sit out each time). */
 export const PREFERENCE_OPTIONS = 4;
 

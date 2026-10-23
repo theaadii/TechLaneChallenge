@@ -39,12 +39,11 @@ export function Results() {
   }
 
   const primary = getTrack(rec.primary);
-  const secondary = rec.secondary ? getTrack(rec.secondary) : null;
-  const others = TRACK_LIST.filter((t) => t.id !== rec.primary && t.id !== rec.secondary);
+  const others = TRACK_LIST.filter((t) => t.id !== rec.primary);
 
   return (
-    <div className="pb-4 pt-2">
-      <p className="font-mono text-sm uppercase tracking-widest text-brand-strong">Your suggested tech lane</p>
+    <div className="pb-28 pt-2 sm:pb-20">
+      <p className="font-mono text-xs uppercase tracking-widest text-brand-strong">Your suggested tech lane</p>
       <h1 className="sr-only">Your track recommendation</h1>
 
       <div className="mt-3">
@@ -58,16 +57,10 @@ export function Results() {
         />
       </div>
 
-      {secondary && (
-        <div className="mt-4">
-          <FeaturedTrackCard track={secondary} selected={selected === secondary.id} onChoose={choose} badge="Also a strong fit" />
-        </div>
-      )}
-
       <MatchChart ranking={rec.ranking} scores={rec.scores} />
 
       <section aria-labelledby="others" className="mt-8">
-        <h2 id="others" className="text-lg font-bold">Explore {secondary ? "other" : "the other"} tracks</h2>
+        <h2 id="others" className="text-lg font-bold">Explore the other tracks</h2>
         <p className="mt-1 text-sm text-muted">This is only a suggestion. You can choose any track that interests you.</p>
         <div className="mt-3 grid gap-3">
           {others.map((t) => (
@@ -76,19 +69,26 @@ export function Results() {
         </div>
       </section>
 
-      <Button variant="ghost" className="mt-6" onClick={() => session.resetChallenge()}>
+      <Button variant="ghost" className="mt-6 w-full sm:w-auto" onClick={() => session.resetChallenge()}>
         Retake the challenge
       </Button>
 
+      {/* Fixed bottom bar */}
       <div className="fixed inset-x-0 bottom-0 z-10 border-t-2 border-ink bg-paper/95 backdrop-blur">
         <div className="mx-auto flex max-w-4xl flex-col gap-2 px-4 py-3 sm:flex-row sm:items-center sm:justify-between sm:gap-6">
-          <p aria-live="polite" className="text-sm text-muted sm:max-w-xs">
-            {selected ? <>Your track: <strong className="text-ink">{getTrack(selected).name}</strong></> : "Choose a track above to unlock your free consultation request."}
+          <p aria-live="polite" className="text-sm text-muted">
+            {selected
+              ? <><strong className="text-ink">✓ {getTrack(selected).name}</strong> — ready to request a consultation</>
+              : "Choose a track above to unlock your free consultation."}
           </p>
           {selected ? (
-            <ButtonLink href="/consultation" className="px-4 sm:px-6">Request Free Consultation</ButtonLink>
+            <ButtonLink href="/consultation" className="w-full py-3 text-center text-base sm:w-auto sm:px-6">
+              Request Free Consultation
+            </ButtonLink>
           ) : (
-            <Button disabled aria-disabled="true" className="px-4 sm:px-6">Request Free Consultation</Button>
+            <Button disabled aria-disabled="true" className="w-full py-3 text-base sm:w-auto sm:px-6">
+              Request Free Consultation
+            </Button>
           )}
         </div>
       </div>

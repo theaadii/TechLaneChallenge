@@ -80,11 +80,11 @@ describe("interest-based scoring (preference)", () => {
 
 describe("scoreAnswers safety", () => {
   it("cannot double count: same input always gives the same score", () => {
-    const a = answersFor(prefOptionFor("genai"));
+    const a = answersFor(prefOptionFor("ai-dev"));
     expect(scoreAnswers(a, QUESTIONS)).toEqual(scoreAnswers({ ...a }, QUESTIONS));
   });
   it("ignores unknown question ids", () => {
-    const a = answersFor(prefOptionFor("genai"));
+    const a = answersFor(prefOptionFor("ai-dev"));
     expect(scoreAnswers({ ...a, "fake-question": "a" }, QUESTIONS).xp).toBe(scoreAnswers(a, QUESTIONS).xp);
   });
   it("max XP is reached by answering everything correctly", () => {
@@ -128,14 +128,14 @@ describe("ties and close results", () => {
     expect(rec.secondary).toBe("fde");
   });
   it("gives no secondary when the leader is far ahead", () => {
-    const rec = recommend(answersFor(prefOptionFor("cloud-devops")), QUESTIONS);
+    const rec = recommend(answersFor(prefOptionFor("web-dev")), QUESTIONS);
     expect(rec.secondary === null || rec.scores[rec.secondary] >= rec.scores[rec.primary] - CLOSE_MARGIN).toBe(true);
   });
 });
 
 describe("manual selection overrides recommendation", () => {
   it("does not change the computed recommendation when another track is chosen", () => {
-    const a = answersFor(prefOptionFor("agentic-ai"));
+    const a = answersFor(prefOptionFor("ai-dev"));
     const rec = recommend(a, QUESTIONS);
     const chosen: TrackId = "mobile";
     expect(rec.primary).toBe("agentic-ai");
